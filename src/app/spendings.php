@@ -22,18 +22,16 @@ class Spendings
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
-}
 
-class SpendingsCalculator
-{
-    public static function calculateTotalSpendings($spendings)
+    public function calculateTotalSpendings()
     {
+        $spendings = $this->fetchAllSpendings();
         $totalSpendingsAmount = 0;
-        foreach ($spendings as $spending)
-        {
+        foreach ($spendings as $spending) {
             $totalSpendingsAmount += $spending['amount'];
         }
         return $totalSpendingsAmount;
     }
 }
+
 ?>
