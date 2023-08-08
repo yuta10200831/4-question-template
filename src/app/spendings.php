@@ -44,12 +44,32 @@ class Spendings
         $month = abs($date[1]);
         if ($month == 2)
         {
-            $display .= $spending["name"] . ": " . $spending["amount"] . "<br/>";
+        $display = $spending["name"] . ": " . $spending["amount"] . "<br/>";
         }
     }
     return $display;
     }
-}
 
+    public function sortByAmountAsc()
+    {
+        $spendings = $this->fetchAllSpendings();
+        $sort = [];
+        foreach ($spendings as $spendingKey => $spending) {
+            $sort[$spendingKey] = $spending["amount"];
+        }
+        array_multisort($sort, SORT_ASC, $spendings);
+        return $spendings;
+    }
+
+    public function displaySortedSpendings()
+    {
+        $sortedSpendings = $this->sortByAmountAsc();
+
+        foreach ($sortedSpendings as $spending) {
+            echo $spending["amount"];
+            echo "<br/>";
+        }
+    }
+}
 
 ?>
