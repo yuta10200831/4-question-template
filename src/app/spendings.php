@@ -44,7 +44,7 @@ class Spendings
         $month = abs($date[1]);
         if ($month == 2)
         {
-        $display = $spending["name"] . ": " . $spending["amount"] . "<br/>";
+        $display .= $spending["name"] . ": " . $spending["amount"] . "<br/>";
         }
     }
     return $display;
