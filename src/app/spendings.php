@@ -60,16 +60,6 @@ class Spendings
         array_multisort($sort, SORT_ASC, $spendings);
         return $spendings;
     }
-
-    public function displaySortedSpendings()
-    {
-        $sortedSpendings = $this->sortByAmountAsc();
-
-        foreach ($sortedSpendings as $spending) {
-            echo $spending["amount"];
-            echo "<br/>";
-        }
-    }
 }
 
 ?>
