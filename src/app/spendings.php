@@ -27,11 +27,31 @@ class Spendings
     {
         $spendings = $this->fetchAllSpendings();
         $totalSpendingsAmount = 0;
-        foreach ($spendings as $spending) {
+        foreach ($spendings as $spending)
+        {
             $totalSpendingsAmount += $spending['amount'];
         }
         return $totalSpendingsAmount;
     }
+
+    public function displaySpendingForMonth()
+    {
+    $spendings = $this->fetchAllSpendings();
+    
+    foreach($spendings as $spending)
+    {
+        $date = explode("-", $spending["accrual_date"]);
+        $month = abs($date[1]);
+        if ($month == 2) {
+            $display[] = [
+                "name" => $spending["name"],
+                "amount" => $spending["amount"]
+            ];
+        }
+    }
+    return $display;
+    }
 }
+
 
 ?>
