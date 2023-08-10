@@ -42,9 +42,12 @@ class Spendings
     {
         $date = explode("-", $spending["accrual_date"]);
         $month = abs($date[1]);
-        if ($month == 2)
-        {
-        $display = $spending["name"] . ": " . $spending["amount"] . "<br/>";
+
+        if ($month == 2) {
+            $display[] = [
+                "name" => $spending["name"],
+                "amount" => $spending["amount"]
+            ];
         }
     }
     return $display;
