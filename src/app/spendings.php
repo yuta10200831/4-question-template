@@ -70,6 +70,28 @@ class Spendings
             echo "<br/>";
         }
     }
+
+    public function 
+    {
+        $totalSpendingsAmount = 0;
+        foreach($spendings as $spending) {
+        $date = explode('-', $spending["accrual_date"]);
+        $month = abs($date[1]);
+        $day = abs($splitDate[2]);
+
+        if($month != 7) 
+        {
+            continue;
+        }
+        $totalSpendingsAmount += $spending["amount"];
+
+        if(strpos($day, "2") !== false)
+        {
+        $totalSpendingsAmount -= 1000;
+        }
+    }
+}
+    echo "7月の支出の合計: " . $totalSpendingAmount;
 }
 
 ?>
