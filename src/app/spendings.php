@@ -42,9 +42,12 @@ class Spendings
     {
         $date = explode("-", $spending["accrual_date"]);
         $month = abs($date[1]);
-        if ($month == 2)
-        {
-        $display .= $spending["name"] . ": " . $spending["amount"] . "<br/>";
+
+        if ($month == 2) {
+            $display[] = [
+                "name" => $spending["name"],
+                "amount" => $spending["amount"]
+            ];
         }
     }
     return $display;
@@ -59,16 +62,6 @@ class Spendings
         }
         array_multisort($sort, SORT_ASC, $spendings);
         return $spendings;
-    }
-
-    public function displaySortedSpendings()
-    {
-        $sortedSpendings = $this->sortByAmountAsc();
-
-        foreach ($sortedSpendings as $spending) {
-            echo $spending["amount"];
-            echo "<br/>";
-        }
     }
 }
 
