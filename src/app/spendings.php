@@ -97,6 +97,33 @@ class Spendings
 
         return $totalSpendingsAmount;
     }
+
+    public function calculateMonthlySpendings()
+    {
+        $spendings = $this->fetchAllSpendings();
+        $monthlyTotals = [];
+
+        foreach ($spendings as $spending) {
+            $date = explode('-', $spending["accrual_date"]);
+            $month = abs($date[1]);
+            $day = abs($date[2]);
+
+            $amount = $spending["amount"];
+            if (strpos($day, "5") !== false) {
+                $amount -= 100;
+            }
+
+            if (!isset($monthlyTotals[$month])) {
+                $monthlyTotals[$month] = 0;
+            }
+
+            $monthlyTotals[$month] += $amount;
+        }
+
+        arsort($monthlyTotals);
+
+        return $monthlyTotals;
+    }
 }
 
 ?>
