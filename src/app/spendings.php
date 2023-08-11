@@ -74,27 +74,29 @@ class Spendings
         }
     }
 
-    public function 
+    public function calculateTotalSpendingsForSeptember()
     {
+        $spendings = $this->fetchAllSpendings();
         $totalSpendingsAmount = 0;
-        foreach($spendings as $spending) {
-        $date = explode('-', $spending["accrual_date"]);
-        $month = abs($date[1]);
-        $day = abs($splitDate[2]);
 
-        if($month != 7) 
-        {
-            continue;
-        }
-        $totalSpendingsAmount += $spending["amount"];
+        foreach ($spendings as $spending) {
+            $date = explode('-', $spending["accrual_date"]);
+            $month = abs($date[1]);
+            $day = abs($date[2]);
 
-        if(strpos($day, "2") !== false)
-        {
-        $totalSpendingsAmount -= 1000;
+            if ($month != 9) {
+                continue;
+            }
+
+            $totalSpendingsAmount += $spending["amount"];
+
+            if (strpos($day, "1") !== false) {
+                $totalSpendingsAmount -= 2000;
+            }
         }
+
+        return $totalSpendingsAmount;
     }
-}
-    echo "7月の支出の合計: " . $totalSpendingAmount;
 }
 
 ?>
