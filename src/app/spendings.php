@@ -23,6 +23,14 @@ class Spendings
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function fetchAllCategories()
+{
+    $sql = "SELECT * FROM categories";
+    $statement = $this->pdo->prepare($sql);
+    $statement->execute();
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
+}
+
     public function calculateTotalSpendings()
     {
         $spendings = $this->fetchAllSpendings();
@@ -146,6 +154,37 @@ class Spendings
         }
     
         return $differences;
+    }
+
+    public function displayUtilitySpendings()
+    {
+        $spendings = $this->fetchAllSpendings();
+        $categories = $this->fetchAllCategories();
+    
+        $utilitySpendings = [];
+    
+        foreach($categories as $category)
+        {
+            if($category["name"] == "水道光熱費")
+            {
+                $categoryId = $category["id"];
+                break;
+            }
+        }
+    
+        foreach($spendings as $spending)
+        {
+            if($spending["category_id"] == $categoryId)
+            {
+                $utilitySpendings[] = [
+                    "accrual_date" => $spending["accrual_date"],
+                    "name" => $spending["name"],
+                    "amount" => $spending["amount"]
+                ];
+            }
+        }
+    
+        return $utilitySpendings;
     }
 }
 
