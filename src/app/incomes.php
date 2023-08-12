@@ -30,4 +30,27 @@ class Incomes
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function calculateMonthlyDifferences()
+    {
+        $incomes = $this->fetchAllIncomes();
+        $totalIncomesAmounts = [];
+    
+        foreach ($incomes as $income) {
+            $date = explode('-', $income["accrual_date"]);
+            $month = abs($date[1]);
+            $totalIncomesAmounts[$month] += $income["amount"];
+        }
+    
+        $differences = [];
+        $previousAmount = $totalIncomesAmounts[1];
+        
+        for ($i = 1; $i <= 6; $i++) {
+            $incomesDifference = abs($totalIncomesAmounts[$i] - $previousAmount);
+            $differences[$i] = $incomesDifference;
+            $previousAmount = $totalIncomesAmounts[$i];
+        }
+    
+        return $differences;
+    }
 }
