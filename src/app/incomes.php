@@ -23,6 +23,14 @@ class Incomes
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function fetchAllIncomeSources()
+    {
+        $sql = "SELECT * FROM income_sources";
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function fetchAndSortByMonthTotal()
     {
         $sql = "SELECT YEAR(accrual_date) as year, MONTH(accrual_date) as month, SUM(amount) as total FROM incomes GROUP BY YEAR(accrual_date), MONTH(accrual_date) ORDER BY total DESC";
@@ -52,5 +60,26 @@ class Incomes
         }
     
         return $differences;
+    }
+
+    public function displayIncomeAndSource()
+    {
+        $sql = "SELECT i.amount, s.name AS source_name 
+        FROM incomes i
+        INNER JOIN income_sources s ON i.incomes_source_id = s.id";
+    
+        $incomeSources = $this->fetchAllIncomeSources();
+    
+        $incomeAndSourceData = [];
+        
+        foreach ($incomeSources as $source)
+        {
+            $incomeAndSourceData[] = [
+                "amount" => $source['amount'],
+                "name" => $source['name']
+            ];
+        }
+
+        return $incomeAndSourceData;
     }
 }
