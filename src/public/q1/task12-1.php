@@ -11,7 +11,7 @@ foreach ($monthlyTotalAmounts as $data)
     $month = str_pad($data['month'], 2, '0', STR_PAD_LEFT);
     $totalAmount = $data['total_amount'];
     
-    echo "{$year}-{$month}の合計収入: {$totalAmount}円";
+    echo "{$year}-{$month}の合計収入: {$totalAmount}";
     echo "<br>";
 }
 ?>
