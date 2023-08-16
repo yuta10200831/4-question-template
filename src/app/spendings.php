@@ -217,6 +217,18 @@ class Spendings
     
         return $utilitySpendings2;
     }
+
+    public function fetchMonthlyTotalAmounts()
+    {
+        $sql = "SELECT YEAR(accrual_date) as year, MONTH(accrual_date) as month, SUM(amount) as total_amount
+                FROM spendings
+                GROUP BY YEAR(accrual_date), MONTH(accrual_date) 
+                ORDER BY year ASC, month ASC";
+        
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 
 ?>
