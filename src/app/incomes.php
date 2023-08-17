@@ -50,7 +50,6 @@ class Incomes
             $differences[$i] = $incomesDifference;
             $previousAmount = $totalIncomesAmounts[$i];
         }
-        var_dump($differences);
         return $differences;
     }
 }
