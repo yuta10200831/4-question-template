@@ -63,6 +63,67 @@ class Spendings
         array_multisort($sort, SORT_ASC, $spendings);
         return $spendings;
     }
+
+    public function displaySortedSpendings()
+    {
+        $sortedSpendings = $this->sortByAmountAsc();
+
+        foreach ($sortedSpendings as $spending) {
+            echo $spending["amount"];
+            echo "<br/>";
+        }
+    }
+
+    public function calculateTotalSpendingsForSeptember()
+    {
+        $spendings = $this->fetchAllSpendings();
+        $totalSpendingsAmount = 0;
+
+        foreach ($spendings as $spending) {
+            $date = explode('-', $spending["accrual_date"]);
+            $month = abs($date[1]);
+            $day = abs($date[2]);
+
+            if ($month != 9) {
+                continue;
+            }
+
+            $totalSpendingsAmount += $spending["amount"];
+
+            if (strpos($day, "1") !== false) {
+                $totalSpendingsAmount -= 2000;
+            }
+        }
+
+        return $totalSpendingsAmount;
+    }
+
+    public function calculateMonthlySpendings()
+    {
+        $spendings = $this->fetchAllSpendings();
+        $monthlyTotals = [];
+
+        foreach ($spendings as $spending) {
+            $date = explode('-', $spending["accrual_date"]);
+            $month = abs($date[1]);
+            $day = abs($date[2]);
+
+            $amount = $spending["amount"];
+            if (strpos($day, "5") !== false) {
+                $amount -= 100;
+            }
+
+            if (!isset($monthlyTotals[$month])) {
+                $monthlyTotals[$month] = 0;
+            }
+
+            $monthlyTotals[$month] += $amount;
+        }
+
+        arsort($monthlyTotals);
+
+        return $monthlyTotals;
+    }
 }
 
 ?>
