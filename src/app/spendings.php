@@ -124,6 +124,29 @@ class Spendings
 
         return $monthlyTotals;
     }
+
+    public function calculateMonthlyDifferences()
+    {
+        $spendings = $this->fetchAllSpendings();
+        $totalSpendingsAmounts = [];
+    
+        foreach ($spendings as $spending) {
+            $date = explode('-', $spending["accrual_date"]);
+            $month = abs($date[1]);
+            $totalSpendingsAmounts[$month] += $spending["amount"];
+        }
+    
+        $differences = [];
+        $previousAmount = $totalSpendingsAmounts[1];
+        
+        for ($i = 1; $i <= 12; $i++) {
+            $spendingsDifference = abs($totalSpendingsAmounts[$i] - $previousAmount);
+            $differences[$i] = $spendingsDifference;
+            $previousAmount = $totalSpendingsAmounts[$i];
+        }
+    
+        return $differences;
+    }
 }
 
 ?>
