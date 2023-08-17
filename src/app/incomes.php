@@ -94,4 +94,23 @@ class Incomes
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function fetchMonthlyIncomeAndExpenditure()
+    {
+        $sql = "SELECT YEAR(accrual_date) as year, DATE_FORMAT(accrual_date, '%m') as month, 
+                SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as total_income,
+                SUM(CASE WHEN type = 'expenditure' THEN amount ELSE 0 END) as total_expenditure
+                FROM incomes
+                UNION
+                SELECT YEAR(accrual_date) as year, DATE_FORMAT(accrual_date, '%m') as month,
+                0 as total_income,
+                SUM(amount) as total_expenditure
+                FROM spendings
+                GROUP BY YEAR(accrual_date), DATE_FORMAT(accrual_date, '%m')
+                ORDER BY year ASC, month ASC";
+    
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
