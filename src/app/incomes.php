@@ -95,12 +95,14 @@ class Incomes
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // 13.サブクエリを使って見よう。課題①
     public function fetchMonthlyIncomeAndExpenditure()
     {
-        $sql = "SELECT YEAR(accrual_date) as year, DATE_FORMAT(accrual_date, '%m') as month, 
-                SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as total_income,
-                SUM(CASE WHEN type = 'expenditure' THEN amount ELSE 0 END) as total_expenditure
+        $sql = "SELECT YEAR(accrual_date) as year, DATE_FORMAT(accrual_date, '%m') as month,
+                SUM(amount) as total_income,
+                0 as total_expenditure
                 FROM incomes
+                GROUP BY YEAR(accrual_date), DATE_FORMAT(accrual_date, '%m')
                 UNION
                 SELECT YEAR(accrual_date) as year, DATE_FORMAT(accrual_date, '%m') as month,
                 0 as total_income,
