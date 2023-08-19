@@ -64,14 +64,14 @@ class Incomes
 
     public function displayIncomeAndSource()
     {
-        $sql = "SELECT i.amount, s.name AS source_name
+        $sql = "SELECT i.amount, s.name
         FROM incomes i
         INNER JOIN income_sources s ON i.income_source_id = s.id";
 
         $statement = $this->pdo->prepare($sql);
         $statement->execute();
         $incomeAndSourceData = $statement->fetchAll(PDO::FETCH_ASSOC);
-        
+
         return $incomeAndSourceData;
     }
 }
