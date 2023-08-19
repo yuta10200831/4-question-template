@@ -13,7 +13,7 @@ foreach ($monthlyIncomeAndExpenditure as $data)
     $totalExpenditure = $data['total_expenditure'];
     $difference = $totalIncome - $totalExpenditure;
     
-    echo "{$year}年-{$month}月: 収入{$totalIncome}円 - 支出{$totalExpenditure}円 = 差額{$difference}円";
+    echo "{$year}-{$month}の「合計収入 - 合計支出」 : {$difference}";
     echo "<br>";
 }
 ?>
