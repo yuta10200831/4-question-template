@@ -186,6 +186,37 @@ class Spendings
     
         return $utilitySpendings;
     }
+
+    public function displayUtilitySpendings2()
+    {
+        $spendings = $this->fetchAllSpendings();
+        $categories = $this->fetchAllCategories();
+    
+        $utilitySpendings2 = [];
+    
+        foreach($categories as $category)
+        {
+            if($category["name"] == "交際費")
+            {
+                $categoryId = $category["id"];
+                break;
+            }
+        }
+    
+        foreach($spendings as $spending)
+        {
+            if($spending["category_id"] == $categoryId)
+            {
+                $utilitySpendings2[] = [
+                    "accrual_date" => $spending["accrual_date"],
+                    "name" => $spending["name"],
+                    "amount" => $spending["amount"]
+                ];
+            }
+        }
+    
+        return $utilitySpendings2;
+    }
 }
 
 ?>
