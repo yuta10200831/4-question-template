@@ -217,6 +217,18 @@ class Spendings
     
         return $utilitySpendings2;
     }
-}
 
+    public function fetchSpendingsAndCategories()
+    {
+        $sql = "SELECT s.amount, c.name 
+                FROM spendings s
+                INNER JOIN categories c ON s.category_id = c.id";
+    
+    $statement = $this->pdo->prepare($sql);
+    $statement->execute();
+    $spendingsAndSourceData = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+    return $spendingsAndSourceData;
+    }
+}
 ?>
