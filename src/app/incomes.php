@@ -54,11 +54,10 @@ class Incomes
         $previousAmount = $totalIncomesAmounts[1];
         
         for ($i = 1; $i <= 6; $i++) {
-            $incomesDifference = abs($totalIncomesAmounts[$i] - $previousAmount);
+            $incomesDifference = abs($totalIncomesAmounts[$i + 1] - $totalIncomesAmounts[$i]);
             $differences[$i] = $incomesDifference;
             $previousAmount = $totalIncomesAmounts[$i];
         }
-    
         return $differences;
     }
 
@@ -74,4 +73,5 @@ class Incomes
 
         return $incomeAndSourceData;
     }
+}
 }
