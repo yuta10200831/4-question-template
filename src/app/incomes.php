@@ -54,31 +54,22 @@ class Incomes
         $previousAmount = $totalIncomesAmounts[1];
         
         for ($i = 1; $i <= 6; $i++) {
-            $incomesDifference = abs($totalIncomesAmounts[$i] - $previousAmount);
+            $incomesDifference = abs($totalIncomesAmounts[$i + 1] - $totalIncomesAmounts[$i]);
             $differences[$i] = $incomesDifference;
             $previousAmount = $totalIncomesAmounts[$i];
         }
-    
         return $differences;
     }
 
     public function displayIncomeAndSource()
     {
-        $sql = "SELECT i.amount, s.name AS source_name 
+        $sql = "SELECT i.amount, s.name
         FROM incomes i
-        INNER JOIN income_sources s ON i.incomes_source_id = s.id";
-    
-        $incomeSources = $this->fetchAllIncomeSources();
-    
-        $incomeAndSourceData = [];
-        
-        foreach ($incomeSources as $source)
-        {
-            $incomeAndSourceData[] = [
-                "amount" => $source['amount'],
-                "name" => $source['name']
-            ];
-        }
+        INNER JOIN income_sources s ON i.income_source_id = s.id";
+
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute();
+        $incomeAndSourceData = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return $incomeAndSourceData;
     }
@@ -94,4 +85,5 @@ class Incomes
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
+}
 }
