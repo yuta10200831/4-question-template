@@ -108,5 +108,38 @@ class Incomes
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    // 13.サブスクエリを使ってみよう。課題②
+    public function calculateSideIncomeProfits()
+    {
+        $sql = "SELECT income.year, income.month, income.total_income, spending.total_expenditure
+        FROM (
+            SELECT YEAR(accrual_date) as year, DATE_FORMAT(accrual_date, '%m') as month,
+            SUM(CASE WHEN income_source_id = 2 THEN amount ELSE 0 END) as total_income
+            FROM incomes
+            GROUP BY YEAR(accrual_date), DATE_FORMAT(accrual_date, '%m')
+        ) AS income
+
+        LEFT JOIN (
+            SELECT YEAR(s.accrual_date) as year, DATE_FORMAT(s.accrual_date, '%m') as month,
+            SUM(
+                CASE 
+                    WHEN c.name = '住宅費' THEN s.amount * 0.5
+                    WHEN c.name = '水道光熱費' THEN s.amount * 0.5
+                    WHEN c.name = '通信料' THEN s.amount * 0.8
+                    WHEN c.name = '交際費' THEN s.amount * 1.0
+                    ELSE 0
+                END
+            ) as total_expenditure
+            FROM spendings s
+            INNER JOIN categories c ON s.category_id = c.id
+            GROUP BY YEAR(s.accrual_date), DATE_FORMAT(s.accrual_date, '%m')
+        ) AS spending ON income.year = spending.year AND income.month = spending.month
+        ORDER BY income.year ASC, income.month ASC";
+    
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 }
